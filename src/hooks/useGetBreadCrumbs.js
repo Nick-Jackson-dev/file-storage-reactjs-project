@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { getBreadCrumbs } from "../index"
+import { getBreadCrumbs } from "../util/getBreadCrumbs"
 
 const useGetBreadCrumbs = ({ allFolders, endFolderId }) => {
   const [crumbsList, setCrumbsList] = useState([])

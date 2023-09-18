@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useDocumentContext } from "../../hooks/useDocumentContext"
+import { useDocumentStore } from "../../hooks/useDocumentStore"
+import { useDocumentStoreFolders } from "../../hooks/useDocumentStoreFolders"
+
+//components
 import FolderSubfolderList from "./FolderSubfolderList"
 import FolderDocumentList from "./FolderDocumentList"
 import MoveDocumentsModal from "./MoveDocumentsModal"
-import {
-  useDocumentStore,
-  useDocumentStoreFolders,
-  AddDocumentForm,
-  AddSubfolderForm,
-} from "../../index"
-
-//components
-import { Button } from "react-bootstrap"
+import AddDocumentForm from "../AddDocumentForm"
+import AddSubfolderForm from "../AddSubfolderForm"
 import MoveFolderModal from "./MoveFolderModal"
+import { Button } from "react-bootstrap"
 
-export default function FolderView({ user }) {
+export default function FolderView({}) {
   const navigate = useNavigate()
-  const { folderId, companyId } = useParams()
+  const { folderId } = useParams()
   const { documentFolders, additionalDocuments } = useDocumentContext()
   const {
     uploadDocument,

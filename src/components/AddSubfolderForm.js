@@ -12,7 +12,7 @@ export default function AddSubfolderForm({
   const [isPending, setIsPending] = useState(false)
 
   const [newSubfolderName, setNewSubfolderName] = useState()
-  const [isInternal, setIsInternal] = useState(false || parentFolder.isInternal)
+  //   const [isInternal, setIsInternal] = useState(false || parentFolder.isInternal)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -26,7 +26,7 @@ export default function AddSubfolderForm({
     await handleAdd({
       parentFolderId: parentFolder.id,
       folderName: newSubfolderName,
-      isInternal,
+      //   isInternal,
     })
 
     setIsPending(false)
@@ -55,7 +55,7 @@ export default function AddSubfolderForm({
             value={newSubfolderName}
           />
         </label>
-        <label className="d-flex align-items-baseline">
+        {/* <label className="d-flex align-items-baseline">
           <span className="text-nowrap me-3">Internal Folder?</span>
           <input
             type="checkbox"
@@ -63,7 +63,7 @@ export default function AddSubfolderForm({
             checked={isInternal}
             disabled={parentFolder.isInternal}
           />
-        </label>
+        </label> */}
         <Button
           variant="primary"
           type="submit"

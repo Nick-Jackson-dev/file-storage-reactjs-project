@@ -1,4 +1,4 @@
-import { useGetBreadCrumbs } from "../index"
+import { useGetBreadCrumbs } from "../hooks/useGetBreadCrumbs"
 
 export default function FolderBreadCrumbs({
   allFolders,

@@ -3,9 +3,10 @@ import { useState } from "react"
 
 // import { useAuthContext } from "../../authentication/index"
 import { useDocumentContext } from "../hooks/useDocumentContext"
-import { useDocumentStoreFolders } from "../index"
+import { useDocumentStoreFolders } from "../hooks/useDocumentStoreFolders"
 //components
-import { FolderView, FolderBreadCrumbs } from "../index"
+import FolderView from "../components/FolderView/FolderView"
+import FolderBreadCrumbs from "../components/FolderBreadCrumbs"
 import { Button } from "react-bootstrap"
 
 export default function DocumentsFolder() {
@@ -14,13 +15,7 @@ export default function DocumentsFolder() {
   const { documentFolders } = useDocumentContext()
   const { folderId } = useParams()
 
-  const {
-    makeFolderPublic,
-    makeFolderInternal,
-    changeFolderName,
-    error,
-    isPending,
-  } = useDocumentStoreFolders()
+  const { changeFolderName, error, isPending } = useDocumentStoreFolders()
 
   //form control
   const [changingName, setChangingName] = useState(false)
@@ -33,10 +28,10 @@ export default function DocumentsFolder() {
   }
 
   const folder = documentFolders.find((f) => `${f.id}` === `${folderId}`)
-  const parentFolder =
-    folder.parentFolderId === "root"
-      ? { id: "root", parentFolderId: "root", name: "root", isInternal: false }
-      : documentFolders.find((f) => `${f.id}` === `${folder.parentFolderId}`)
+  //   const parentFolder =
+  //     folder.parentFolderId === "root"
+  //       ? { id: "root", parentFolderId: "root", name: "root", isInternal: false }
+  //       : documentFolders.find((f) => `${f.id}` === `${folder.parentFolderId}`)
 
   if (typeof folder === "undefined")
     return <div className="error">No folder with id {folderId} </div>
@@ -82,7 +77,7 @@ export default function DocumentsFolder() {
           {changingName && "Cancel"}
         </p>
 
-        {!changingName && (
+        {/* {!changingName && (
           <>
             <Button
               variant="primary"
@@ -93,8 +88,8 @@ export default function DocumentsFolder() {
               Make Internal
             </Button>
           </>
-        )}
-        {!changingName && (
+        )} 
+         {!changingName && (
           <>
             <i className="text-muted fs-6 ms-2">(internal)</i>
 
@@ -107,7 +102,7 @@ export default function DocumentsFolder() {
               Make Public
             </Button>
           </>
-        )}
+        )} */}
       </div>
 
       {/* Breadcrumbs here */}

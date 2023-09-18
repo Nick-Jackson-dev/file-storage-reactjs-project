@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import { Modal, Button } from "react-bootstrap"
 import { useDocumentContext } from "../../hooks/useDocumentContext"
-
-import {
-  FolderBreadCrumbs,
-  getAllChildFolderIds,
-  useDocumentStoreFolders,
-} from "../../index"
+import { useDocumentStoreFolders } from "../../hooks/useDocumentStoreFolders"
+//components
+import FolderBreadCrumbs from "../FolderBreadCrumbs"
 import FolderSubfolderList from "./FolderSubfolderList"
+
+//util
+import { getAllChildFolderIds } from "../../util/getAllChildFolderIds"
 
 export default function MoveFolderModal({ show, handleClose, folder }) {
   const { documentFolders } = useDocumentContext()

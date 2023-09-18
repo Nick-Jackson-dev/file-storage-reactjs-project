@@ -5,7 +5,8 @@ import { useFirestore } from "./useFirestore"
 import { useDocumentContext } from "./useDocumentContext"
 // import { useAuthContext } from "../../authentication"
 //utilities
-import { getBreadCrumbs, getAllChildFolderIds } from ".."
+import { getBreadCrumbs } from "../util/getBreadCrumbs"
+import { getAllChildFolderIds } from "../util/getAllChildFolderIds"
 
 const useDocumentStoreFolders = () => {
   const { documentFolders } = useDocumentContext()
@@ -24,7 +25,30 @@ const useDocumentStoreFolders = () => {
     setDocument,
   } = useFirestore()
 
-  const addFolder = async ({ folderName, isInternal, parentFolderId }) => {
+  const createStore = async () => {
+    //UNTESTED
+    //check if there is a store already
+    const documentStore = await getDocument(
+      "additionalDocuments/documentClassification"
+    )
+    const carryOn = true
+    if (documentStore.exists) {
+      carryOn = window.confirm(
+        "there is already a store. Do you want to delete it and start new?"
+      )
+    }
+    if (!carryOn) return
+
+    //make a document store
+    await setDocument("additionalDocuments/documentClassification", {
+      documentList: [],
+      folders: [],
+    })
+
+    return
+  }
+
+  const addFolder = async ({ folderName, parentFolderId }) => {
     setError("")
     //make sure no folders with the same parentFolderId as this one matches in name
     let match = false
@@ -46,7 +70,6 @@ const useDocumentStoreFolders = () => {
       folders: [
         ...documentFolders,
         {
-          isInternal: Boolean(isInternal),
           parentFolderId: `${parentFolderId}`,
           name: folderName,
           id: Math.round(Math.random() * 100000000000),
@@ -55,7 +78,7 @@ const useDocumentStoreFolders = () => {
     }
 
     await updateDocument(
-      `additionalDocuments/documentClassification`,
+      "additionalDocuments/documentClassification",
       updateObject
     )
   }
@@ -72,7 +95,7 @@ const useDocumentStoreFolders = () => {
     const updateObject = { folders: newFolders }
 
     //update firestore
-    await updateDocument(`additionalDocuments/documentClassification`, {
+    await updateDocument("additionalDocuments/documentClassification", {
       ...updateObject,
     })
   }
@@ -210,6 +233,7 @@ const useDocumentStoreFolders = () => {
   }
 
   return {
+    createStore,
     addFolder,
     changeFolderName,
     makeFolderInternal,

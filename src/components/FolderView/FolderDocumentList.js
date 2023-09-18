@@ -39,7 +39,7 @@ export default function FolderDocumentList({
       title: "Upload Date",
       changeSortByTo: "currentDocument.uploadedAt",
     },
-    { sortable: false, title: "UploadedBy", changeSortByTo: "" },
+    // { sortable: false, title: "UploadedBy", changeSortByTo: "" },
     { sortable: false, title: "File Actions", changeSortByTo: "" },
   ]
 
@@ -93,7 +93,7 @@ export default function FolderDocumentList({
                     "yyyy-MM-dd"
                   )}
                 </td>
-                <td>{doc.currentDocument.uploadedBy.displayName}</td>
+                {/* <td>{doc.currentDocument.uploadedBy.displayName}</td> */}
                 <td className="align-left">
                   <DownloadFileButton
                     className="ms-2 me-2"
