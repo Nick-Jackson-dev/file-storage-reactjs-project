@@ -1,0 +1,7 @@
+.collapse-icon {
+    width: 20px;
+    height: 20px;
+}
+.collapse-icon:hover {
+    cursor: pointer;
+}
