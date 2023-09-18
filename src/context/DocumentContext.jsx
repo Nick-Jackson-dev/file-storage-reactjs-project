@@ -17,7 +17,7 @@ export const DocumentReducer = (state, action) => {
 }
 
 export const DocumentContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(InfoReducer, {
+  const [state, dispatch] = useReducer(DocumentReducer, {
     documentFolders: [],
     additionalDocuments: [],
   })

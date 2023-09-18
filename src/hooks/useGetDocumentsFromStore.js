@@ -1,12 +1,11 @@
 //note, this is now done in company context
 //hooks
-import { useCollection } from "../../../hooks/useCollection"
+import { useCollection } from "./useCollection"
 
-const useGetDocumentsFromStore = ({ companyId }) => {
+const useGetDocumentsFromStore = ({}) => {
   //get array of objects representing the documents in the folder
-  const { documents: companyAdditionalDocuments } = useCollection(
-    `companies/${companyId}/additionalDocuments`
-  )
+  const { documents: companyAdditionalDocuments } =
+    useCollection(`additionalDocuments`)
 
   return companyAdditionalDocuments
 }

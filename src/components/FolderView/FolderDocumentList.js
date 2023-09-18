@@ -18,7 +18,6 @@ export default function FolderDocumentList({
   callDeleteCurrent,
   callDeleteAll,
   callDeleteHistoricalDocument,
-  user,
 }) {
   const [expandedDocumentHistory, setExpandedDocumentHistory] = useState("")
   const [sortBy, setSortBy] = useState("name")
@@ -103,44 +102,40 @@ export default function FolderDocumentList({
                     buttonText=""
                     icon={true}
                   />
-                  {user.admin && (
-                    <>
+                  <>
+                    <img
+                      src={editIcon}
+                      alt="edit document"
+                      title="edit this document"
+                      className="icon ms-2 me-2"
+                      onClick={() => callRevise(doc.name)}
+                    />
+                    <img
+                      src={moveFileIcon}
+                      alt="move document"
+                      title="move this document to a different folder"
+                      className="icon ms-2 me-2"
+                      onClick={() => callStartMove(doc)}
+                    />
+                    <img
+                      src={trashIcon}
+                      alt="delete document"
+                      title="delete this document - cannot recover"
+                      className="icon ms-2 me-2"
+                      onClick={() =>
+                        callDeleteCurrent({ documentId: doc.name })
+                      }
+                    />
+                    {doc.history.length > 0 && (
                       <img
-                        src={editIcon}
-                        alt="edit document"
-                        title="edit this document"
+                        src={deleteAllIcon}
+                        alt="delete All documents"
+                        title="delete this document and its history - cannot recover"
                         className="icon ms-2 me-2"
-                        onClick={() => callRevise(doc.name)}
+                        onClick={() => callDeleteAll({ documentId: doc.name })}
                       />
-                      <img
-                        src={moveFileIcon}
-                        alt="move document"
-                        title="move this document to a different folder"
-                        className="icon ms-2 me-2"
-                        onClick={() => callStartMove(doc)}
-                      />
-                      <img
-                        src={trashIcon}
-                        alt="delete document"
-                        title="delete this document - cannot recover"
-                        className="icon ms-2 me-2"
-                        onClick={() =>
-                          callDeleteCurrent({ documentId: doc.name })
-                        }
-                      />
-                      {doc.history.length > 0 && (
-                        <img
-                          src={deleteAllIcon}
-                          alt="delete All documents"
-                          title="delete this document and its history - cannot recover"
-                          className="icon ms-2 me-2"
-                          onClick={() =>
-                            callDeleteAll({ documentId: doc.name })
-                          }
-                        />
-                      )}
-                    </>
-                  )}
+                    )}
+                  </>
                 </td>
               </tr>
 
@@ -162,20 +157,18 @@ export default function FolderDocumentList({
                         buttonText=""
                         icon={true}
                       />
-                      {user.admin && (
-                        <img
-                          src={trashIcon}
-                          alt="delete document"
-                          title="delete this document from history - cannot recover"
-                          className="icon ms-2 me-2"
-                          onClick={() =>
-                            callDeleteHistoricalDocument({
-                              documentId: doc.name,
-                              fileURL: h.documentURL,
-                            })
-                          }
-                        />
-                      )}
+                      <img
+                        src={trashIcon}
+                        alt="delete document"
+                        title="delete this document from history - cannot recover"
+                        className="icon ms-2 me-2"
+                        onClick={() =>
+                          callDeleteHistoricalDocument({
+                            documentId: doc.name,
+                            fileURL: h.documentURL,
+                          })
+                        }
+                      />
                     </td>
                   </tr>
                 ))}

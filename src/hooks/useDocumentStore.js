@@ -6,15 +6,15 @@ import { useDocumentContext } from "./useDocumentContext"
 
 //utilities
 import { format } from "date-fns"
-import { getFileExtension, getMetadata } from "../../../util/verifyFileInput"
-import checkDuplicateInArray from "../../../util/checkDuplicateInArray"
+import { getFileExtension, getMetadata } from "../util/verifyFileInput"
+import checkDuplicateInArray from "../util/checkDuplicateInArray"
 import { Timestamp } from "firebase/firestore"
-import { useAuthContext } from "../../authentication"
+// import { useAuthContext } from "../../authentication"
 
 const useDocumentStore = () => {
-  const { companyData, additionalDocuments, documentsOverMaxPermitted } =
+  const { additionalDocuments, documentsOverMaxPermitted } =
     useDocumentContext()
-  const { user } = useAuthContext()
+  //   const { user } = useAuthContext()
   const [error, setError] = useState("")
   const {
     uploadFile,
@@ -50,7 +50,7 @@ const useDocumentStore = () => {
     let documentObject = null
     if (documentExists) {
       documentObject = await getDocument(
-        `companies/${companyData.companyId}/additionalDocuments/${documentInfo.name}`
+        `additionalDocuments/${documentInfo.name}`
       )
       //not allowed to use the same document in multiple categories
       if (documentObject && `${documentObject.folderId}` !== `${folderId}`)
@@ -69,7 +69,7 @@ const useDocumentStore = () => {
         documentObject.history.length + 1
       }_${dateString}.${fileExtension}`
 
-    const storagePath = `companies/${companyData.companyId}/additionalDocuments/${folderId}/${documentInfo.name}/${fileName}`
+    const storagePath = `additionalDocuments/${folderId}/${documentInfo.name}/${fileName}`
 
     //place document in storage
     const documentURL = await uploadFile(storagePath, document, metadata)
@@ -85,23 +85,23 @@ const useDocumentStore = () => {
         folderId: `${folderId}`,
         name: documentInfo.name,
         createdAt: Timestamp.fromDate(new Date()),
-        createdBy: {
-          displayName: user.displayName,
-          uid: user.uid,
-        },
+        // createdBy: {
+        //   displayName: user.displayName,
+        //   uid: user.uid,
+        // },
         currentDocument: {
           documentURL,
           uploadedAt: Timestamp.fromDate(new Date()),
-          uploadedBy: {
-            displayName: user.displayName,
-            uid: user.uid,
-          },
+          //   uploadedBy: {
+          //     displayName: user.displayName,
+          //     uid: user.uid,
+          //   },
           fileName,
         },
         history: [],
       }
       newDocument = await setDocument(
-        `companies/${companyData.companyId}/additionalDocuments/${documentInfo.name}`,
+        `additionalDocuments/${documentInfo.name}`,
         updateObject
       )
     } else {
@@ -114,16 +114,16 @@ const useDocumentStore = () => {
         currentDocument: {
           documentURL,
           uploadedAt: Timestamp.fromDate(new Date()),
-          uploadedBy: {
-            displayName: user.displayName,
-            uid: user.uid,
-          },
+          //   uploadedBy: {
+          //     displayName: user.displayName,
+          //     uid: user.uid,
+          //   },
           fileName,
         },
         history: historyObject,
       }
       newDocument = await updateDocument(
-        `companies/${companyData.companyId}/additionalDocuments/${documentInfo.name}`,
+        `additionalDocuments/${documentInfo.name}`,
         updateObject
       )
     }
@@ -133,17 +133,14 @@ const useDocumentStore = () => {
   //deletes the current document and moves the latest historical document info to the current info, then deletes that one from the document history. also deleted the current document file from firebase storage
   const deleteCurrentDocument = async ({ documentId }) => {
     const { cont, error: verificationError } = verifyDelete({
-      companyId: companyData.companyId,
-      user,
+      //   user,
       documentId,
     })
     if (verificationError) return setError(verificationError)
     if (!cont) return
 
     //getFirestore document
-    const documentData = await getDocument(
-      `companies/${companyData.companyId}/additionalDocuments/${documentId}`
-    )
+    const documentData = await getDocument(`additionalDocuments/${documentId}`)
 
     //delete From Storage
     //delete from storage
@@ -152,9 +149,7 @@ const useDocumentStore = () => {
     //if no document history just delete the document
     if (documentData.history.length === 0) {
       //delete the entire firestore
-      deleteDocument(
-        `companies/${companyData.companyId}/additionalDocuments/${documentId}`
-      )
+      deleteDocument(`additionalDocuments/${documentId}`)
     } else {
       //if there is document history, the first documetnData.history array element will replace documentData.currentDocument:
       //get new history and the first element
@@ -168,10 +163,7 @@ const useDocumentStore = () => {
       }
 
       //update firestore
-      updateDocument(
-        `companies/${companyData.companyId}/additionalDocuments/${documentId}`,
-        { ...updateObject }
-      )
+      updateDocument(`additionalDocuments/${documentId}`, { ...updateObject })
     }
 
     //update deletedDocument log
@@ -179,24 +171,22 @@ const useDocumentStore = () => {
     deleteLogObject[`${documentData.name}_currentDocument_${new Date()}`] = {
       documentName: documentData.name,
       deletedAt: new Date(),
-      deletedBy: {
-        displayName: user.displayName,
-        uid: user.uid,
-        email: user.email,
-      },
+      //   deletedBy: {
+      //     displayName: user.displayName,
+      //     uid: user.uid,
+      //     email: user.email,
+      //   },
       message: `deleted the most recent revision of Document ${documentData.name} - ${documentData.currentDocument.fileName}`,
     }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/deletedDocuments`,
-      { ...deleteLogObject }
-    )
+    await updateDocument(`additionalDocuments/deletedDocuments`, {
+      ...deleteLogObject,
+    })
   }
 
   //deletes a specific document from history data of the document, also deletes that correspoinding file from firebase storage
   const deleteDocumentFromHistory = async ({ documentId, fileURL }) => {
     const { cont, error: verificationError } = verifyDelete({
-      companyId: companyData.companyId,
-      user,
+      //   user,
       deleteHistoryDoc: true,
       documentId,
     })
@@ -204,9 +194,7 @@ const useDocumentStore = () => {
     if (!cont) return
 
     //getFirestore document
-    const documentData = await getDocument(
-      `companies/${companyData.companyId}/additionalDocuments/${documentId}`
-    )
+    const documentData = await getDocument(`additionalDocuments/${documentId}`)
 
     //get the document from history that is to be deleted, and new history array
     let docToDelete = null
@@ -226,34 +214,31 @@ const useDocumentStore = () => {
 
     //updateFirestore Document
     const newDocumentObject = { history: newHistory }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/${documentId}`,
-      { ...newDocumentObject }
-    )
+    await updateDocument(`additionalDocuments/${documentId}`, {
+      ...newDocumentObject,
+    })
 
     //track the document that was deleted
     const deleteLogObject = { lastUpdated: new Date() }
     deleteLogObject[`${documentData.name}_historical_${new Date()}`] = {
       documentName: documentData.name,
       deletedAt: new Date(),
-      deletedBy: {
-        displayName: user.displayName,
-        uid: user.uid,
-        email: user.email,
-      },
+      //   deletedBy: {
+      //     displayName: user.displayName,
+      //     uid: user.uid,
+      //     email: user.email,
+      //   },
       message: `deleted the historical Document ${docToDelete.fileName}`,
     }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/deletedDocuments`,
-      { ...deleteLogObject }
-    )
+    await updateDocument(`additionalDocuments/deletedDocuments`, {
+      ...deleteLogObject,
+    })
   }
 
   //deletes an entire document, history and all (removes the document from the firestore subcollection). also deletes all associated files from firebase storage.
   const deleteDocumentAndHistory = async ({ documentId }) => {
     const { cont, error: verificationError } = verifyDelete({
-      companyId: companyData.companyId,
-      user,
+      //   user,
       delteAll: true,
       documentId,
     })
@@ -261,9 +246,7 @@ const useDocumentStore = () => {
     if (!cont) return
 
     //getFirestore document
-    const documentData = await getDocument(
-      `companies/${companyData.companyId}/additionalDocuments/${documentId}`
-    )
+    const documentData = await getDocument(`additionalDocuments/${documentId}`)
 
     //delete each file in firebase storage assoiated with current doc and history
     deleteFile(documentData.currentDocument.documentURL)
@@ -274,26 +257,23 @@ const useDocumentStore = () => {
     }
 
     //delete the firestore document
-    deleteDocument(
-      `companies/${companyData.companyId}/additionalDocuments/${documentId}`
-    )
+    deleteDocument(`additionalDocuments/${documentId}`)
 
     //add to deletedDocumetns array
     const updateObject = { lastUpdated: new Date() }
     updateObject[`${documentData.name}_${new Date()}`] = {
       documentName: documentData.name,
       deletedAt: new Date(),
-      deletedBy: {
-        displayName: user.displayName,
-        uid: user.uid,
-        email: user.email,
-      },
+      //   deletedBy: {
+      //     displayName: user.displayName,
+      //     uid: user.uid,
+      //     email: user.email,
+      //   },
       message: "deleted the document and all of its history",
     }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/deletedDocuments`,
-      { ...updateObject }
-    )
+    await updateDocument(`additionalDocuments/deletedDocuments`, {
+      ...updateObject,
+    })
   }
 
   return {
@@ -310,17 +290,10 @@ export { useDocumentStore }
 
 const verifyDelete = ({
   documentId,
-  companyId,
-  user,
   deleteHistoryDoc = false,
   deleteAll = false,
 }) => {
   //make sure the user has rights to do this
-  if (!user.admin || user.company !== companyId)
-    return {
-      cont: false,
-      error: "you do not have the rights to delete documents or files",
-    }
 
   let message = `You are DELETING this document's (${documentId}) most recent entry. This file CANNOT be recovered from eLabTracker after this is done. Do you want to continue?`
 

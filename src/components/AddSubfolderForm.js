@@ -4,7 +4,6 @@ import { Button } from "react-bootstrap"
 //notes: place in a component that needs to add an accreditation document
 //the parent component may want to control whether the form renders which is the intent of setAddindSubfolder prop
 export default function AddSubfolderForm({
-  user,
   parentFolder,
   setAddingSubfolder,
   handleAdd,
@@ -17,9 +16,6 @@ export default function AddSubfolderForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    if (!user.admin)
-      return setFormError(`you need to have admin rights to add a subfolder`)
 
     //see if required fields are filled
     if (!newSubfolderName) return setFormError("a subfolder name is required")

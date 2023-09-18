@@ -120,7 +120,6 @@ export default function FolderView({ user }) {
       {folderError && <p className="error">{folderError}</p>}
       {addingDoc && (
         <AddDocumentForm
-          user={user}
           documents={additionalDocuments}
           folderId={thisFolderId}
           setAddingDoc={setAddingDoc}
@@ -131,7 +130,6 @@ export default function FolderView({ user }) {
       )}
       {addingSubfolder && (
         <AddSubfolderForm
-          user={user}
           parentFolder={thisFolder}
           setAddingSubfolder={setAddingSubfolder}
           handleAdd={addFolder}
@@ -152,7 +150,6 @@ export default function FolderView({ user }) {
         callDeleteCurrent={deleteCurrentDocument}
         callDeleteAll={deleteDocumentAndHistory}
         callDeleteHistoricalDocument={deleteDocumentFromHistory}
-        user={user}
       />
 
       {/* Modals */}

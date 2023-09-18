@@ -1,21 +1,21 @@
 //hooks
 import { useState } from "react"
-import { useStorage } from "../../../hooks/useStorage"
-import { useFirestore } from "../../../hooks/useFirestore"
-import { useCompanyContext } from "../../company"
-import { useAuthContext } from "../../authentication"
+import { useFirebaseStorage } from "./useFirebaseStorage"
+import { useFirestore } from "./useFirestore"
+import { useDocumentContext } from "./useDocumentContext"
+// import { useAuthContext } from "../../authentication"
 //utilities
 import { getBreadCrumbs, getAllChildFolderIds } from ".."
 
 const useDocumentStoreFolders = () => {
-  const { companyData, documentFolders } = useCompanyContext()
-  const { user } = useAuthContext()
+  const { documentFolders } = useDocumentContext()
+  //   const { user } = useAuthContext()
   const [error, setError] = useState("")
   const {
     uploadFile,
     error: uploadError,
     isPending: uploadPending,
-  } = useStorage()
+  } = useFirebaseStorage()
   const {
     isPending,
     error: firestoreError,
@@ -55,7 +55,7 @@ const useDocumentStoreFolders = () => {
     }
 
     await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/documentClassification`,
+      `additionalDocuments/documentClassification`,
       updateObject
     )
   }
@@ -72,10 +72,9 @@ const useDocumentStoreFolders = () => {
     const updateObject = { folders: newFolders }
 
     //update firestore
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/documentClassification`,
-      { ...updateObject }
-    )
+    await updateDocument(`additionalDocuments/documentClassification`, {
+      ...updateObject,
+    })
   }
 
   const makeFolderInternal = async (folderId, force = false) => {
@@ -108,10 +107,9 @@ const useDocumentStoreFolders = () => {
     const updateObject = { folders: newFolders }
 
     //update firestore
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/documentClassification`,
-      { ...updateObject }
-    )
+    await updateDocument(`additionalDocuments/documentClassification`, {
+      ...updateObject,
+    })
     return
   }
 
@@ -144,10 +142,9 @@ const useDocumentStoreFolders = () => {
 
     //update firestore
     const updateObject = { folders: newFolders }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/documentClassification`,
-      { ...updateObject }
-    )
+    await updateDocument(`additionalDocuments/documentClassification`, {
+      ...updateObject,
+    })
   }
 
   const moveFileToFolder = async ({ destinationFolderId, documentId }) => {
@@ -155,10 +152,9 @@ const useDocumentStoreFolders = () => {
     console.log("start move")
     //update Firestore document
     const updateObject = { folderId: destinationFolderId }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/${documentId}`,
-      { ...updateObject }
-    )
+    await updateDocument(`additionalDocuments/${documentId}`, {
+      ...updateObject,
+    })
 
     if (firestoreError) return setError(firestoreError)
   }
@@ -208,10 +204,9 @@ const useDocumentStoreFolders = () => {
 
     //update firestore
     const updateObject = { folders: newFolders }
-    await updateDocument(
-      `companies/${companyData.companyId}/additionalDocuments/documentClassification`,
-      { ...updateObject }
-    )
+    await updateDocument(`additionalDocuments/documentClassification`, {
+      ...updateObject,
+    })
   }
 
   return {

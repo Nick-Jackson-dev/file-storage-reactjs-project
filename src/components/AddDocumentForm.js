@@ -6,7 +6,6 @@ import { Button } from "react-bootstrap"
 //the parent component may want to control whether the form renders which is the intent of setAddindDoc prop
 //newDocName and setNewDocName are not local because they may be auto-filled by parent in the event of a revision to a document.
 export default function AddDocumentForm({
-  user,
   folderId,
   setAddingDoc,
   newDocName,
@@ -29,11 +28,6 @@ export default function AddDocumentForm({
 
   const startUpload = async (e) => {
     e.preventDefault()
-
-    if (!user.admin)
-      return setFormError(
-        `you need to have admin rights to add or change documents on the database`
-      )
 
     //see if required fields are filled
     if (!newDocument)
