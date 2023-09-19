@@ -7,18 +7,32 @@ import { useDocumentStoreFolders } from "../../hooks/useDocumentStoreFolders"
 import FolderSubfolderList from "./FolderSubfolderList"
 import FolderBreadCrumbs from "../FolderBreadCrumbs"
 
+//util
+import { getAllChildFolderIds } from "../../util/getAllChildFolderIds"
+
 export default function MoveDocumentsModal({ show, handleClose, document }) {
   const { documentFolders } = useDocumentContext()
   const { error, isPending, moveFileToFolder } = useDocumentStoreFolders()
+
+  const childFolderIds = getAllChildFolderIds({
+    allFolders: documentFolders,
+    folderId: document.parentFolderId,
+  })
 
   const [selectedFolderId, setSelectedFolderId] = useState(document.folderId)
   const [subfolders, setSubfolders] = useState([])
 
   //update subfolders when selected folder changes
   useEffect(() => {
-    let subfolderList = documentFolders.filter(
-      (folder) => `${folder.parentFolderId}` === `${selectedFolderId}`
-    )
+    let subfolderList = documentFolders.filter((folder) => {
+      if (selectedFolderId === "") {
+        return folder.parentFolderId === "root"
+      }
+      return (
+        `${folder.parentFolderId}` === `${selectedFolderId}` &&
+        !childFolderIds.some((childId) => `${childId}` === `${folder.id}`)
+      )
+    })
     setSubfolders(subfolderList)
   }, [selectedFolderId, documentFolders])
 
