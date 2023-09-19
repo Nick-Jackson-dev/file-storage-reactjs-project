@@ -44,11 +44,12 @@ export default function FolderDocumentList({
   ]
 
   if (displayedDocuments.length === 0) {
-    return <p className="error">No documents to display</p>
+    return <p className="error">No files to display</p>
   }
 
   return (
     <div className="data-list-container">
+      <h2>Files</h2>
       <Table striped hover bordered className="data-list-table" size="md">
         <TableHeaderSortable
           thArray={tableHeaderArray}
@@ -148,7 +149,7 @@ export default function FolderDocumentList({
                   >
                     <td></td>
                     <td>{format(h.uploadedAt.toDate(), "yyyy-MM-dd")}</td>
-                    <td>{h.uploadedBy.displayName}</td>
+                    {/* <td>{h.uploadedBy.displayName}</td> */}
                     <td>
                       <DownloadFileButton
                         className="ms-2 me-2"

@@ -58,7 +58,7 @@ export default function MoveFolderModal({ show, handleClose, folder }) {
     <div>
       <Modal show={show} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Moving Document - {folder.name}</Modal.Title>
+          <Modal.Title>Moving Folder - {folder.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ minHeight: "300px", overflowY: "scroll" }}>
           {selectedFolderId !== "" && (

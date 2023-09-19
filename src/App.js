@@ -6,16 +6,22 @@ import DocumentsFolder from "./pages/DocumentsFolder"
 
 //css
 import "./App.css"
+import { Container } from "react-bootstrap"
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<DocumentStore />} />
-        <Route path="additional-docs" element={<DocumentStore />} />
-        <Route path="additional-docs/:folderId" element={<DocumentsFolder />} />
-      </Routes>
-    </BrowserRouter>
+    <Container>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<DocumentStore />} />
+          <Route path="additional-docs" element={<DocumentStore />} />
+          <Route
+            path="additional-docs/:folderId"
+            element={<DocumentsFolder />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </Container>
   )
 }
 

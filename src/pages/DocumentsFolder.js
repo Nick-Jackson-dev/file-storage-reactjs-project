@@ -43,7 +43,7 @@ export default function DocumentsFolder() {
   return (
     <>
       <div className="d-flex align-items-baseline">
-        {!changingName && folder.name}
+        {!changingName && <h1 className="mt-2">{folder.name}</h1>}
         {changingName && (
           <>
             <input
@@ -53,7 +53,8 @@ export default function DocumentsFolder() {
               onChange={(e) => {
                 setNewName(e.target.value.replace("/", "-"))
               }}
-              style={{ height: "1.2em", width: "200px" }}
+              style={{ height: "1.75em", fontSize: "1.75em", width: "200px" }}
+              className="mt-2"
             />
             <Button
               variant="primary"

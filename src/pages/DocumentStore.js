@@ -8,7 +8,7 @@ export default function DocumentStore() {
 
   return (
     <>
-      <h1>Company Document Store</h1>
+      <h1>Document Store</h1>
       <FolderView />
     </>
   )

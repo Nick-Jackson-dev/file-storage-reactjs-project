@@ -1,0 +1,26 @@
+.data-list-container{
+    max-height: 600px;
+    overflow-y: scroll;
+    font-size: .9em;
+}
+.data-list-table tr td{
+    cursor: pointer;
+    min-height: 4em;
+    vertical-align: middle;
+}
+.data-list-table tr.active {
+    border-color:darkgray;
+    background-color: darkgrey;
+}
+
+.data-list-table tr.expanded-row {
+    background: #ced4da; 
+    max-height: 2em;
+    font-size: .8em;
+    color: #6c757d;
+    padding: 0;
+}
+.data-list-table tr.expanded-row button{
+    font-size: 0.9em;
+    height: 2.5em;
+}
